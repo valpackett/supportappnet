@@ -120,12 +120,17 @@ get '/:name' do
 end
 
 post '/:name/reply' do
-  @page = PageRepository.find_first_by_name params[:name]
-  page_author_username = @adn.get("users/#{@page.author_adn_id}").body['data']['username']
-  @adn.post 'posts', :text => "@#{page_author_username} #{params[:text]}", :reply_to => @page.adn_id, :annotations => [
-    {:type => 'com.floatboth.supportadn.entry', :value => {:type => params[:type]}}
-  ]
-  flash[:msg] = 'Thanks for your suggestion!'
+  begin
+    Validator.valid_post? params[:text]
+    @page = PageRepository.find_first_by_name params[:name]
+    page_author_username = @adn.get("users/#{@page.author_adn_id}").body['data']['username']
+    @adn.post 'posts', :text => "@#{page_author_username} #{params[:text]}", :reply_to => @page.adn_id, :annotations => [
+      {:type => 'com.floatboth.supportadn.entry', :value => {:type => params[:type]}}
+    ]
+    flash[:msg] = 'Thanks for your suggestion!'
+  rescue ValidationException => e
+    flash[:msg] = e.message
+  end
   redirect '/' + params[:name]
 end
 
@@ -175,10 +180,15 @@ get '/:name/:entry_id' do
 end
 
 post '/:name/:entry_id/reply' do
-  @page = PageRepository.find_first_by_name params[:name]
-  sugg_author_username = @adn.get("posts/#{params[:entry_id]}").body['data']['user']['username']
-  @adn.post 'posts', :text => "@#{sugg_author_username} #{params[:text]}", :reply_to => params[:entry_id]
-  flash[:msg] = 'Thanks for your comment!'
+  begin
+    Validator.valid_post? params[:text]
+    @page = PageRepository.find_first_by_name params[:name]
+    sugg_author_username = @adn.get("posts/#{params[:entry_id]}").body['data']['user']['username']
+    @adn.post 'posts', :text => "@#{sugg_author_username} #{params[:text]}", :reply_to => params[:entry_id]
+    flash[:msg] = 'Thanks for your comment!'
+  rescue ValidationException => e
+    flash[:msg] = e.message
+  end
   redirect "/#{params[:name]}/#{params[:entry_id]}"
 end
 
