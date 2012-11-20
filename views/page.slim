@@ -21,6 +21,7 @@ h1
         a href="/#{@page.name}?filter=#{type[:slug]}"
           i class=type[:icon]
           | &nbsp;#{type[:plural]}
+  - @is_page = true
   - @entries.each do |entry|
     - @entry = entry
     .well

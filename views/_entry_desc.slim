@@ -1,5 +1,12 @@
 h4
   == unmention @entry['html']
+  - if !@is_page.nil? && params[:filter].nil?
+    | &nbsp;
+    - type = type_of_entry @entry
+    - unless type.nil?
+      span.label.label-info
+        i class="icon-white #{type[:icon]}"
+        |  #{type[:singular]}
   | &nbsp;
   span.badge.badge-success #{@entry['num_reposts']} vote#{'s' unless @entry['num_reposts'] == 1}
 | by #{@entry['user']['name']} (@

@@ -55,6 +55,11 @@ helpers do
       {:slug => 'praise', :singular => 'Praise', :plural => 'Praise', :icon => 'icon-heart'},
     ]
   end
+
+  def type_of_entry(entry)
+    anns = entry['annotations'].select { |a| a['type'] == 'com.floatboth.supportadn.entry' }
+    types.select { |t| t[:slug] == anns.first['value']['type'] }.first unless anns.empty?
+  end
 end
 
 get '/auth/appdotnet/callback' do
