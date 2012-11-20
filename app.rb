@@ -80,19 +80,15 @@ get '/auth/logout' do
 end
 
 post '/new' do
-  if Validator.valid_page(params[:name])
-    if PageRepository.find_first_by_name(params[:name]).nil?
-      adn_page = @adn.post 'posts', :machine_only => true, :annotations => [{:type => 'com.floatboth.supportadn.page', :value => {:name => params[:name]}}]
-      adn_page = adn_page.body['data']
-      page = Page.new :name => params[:name], :adn_id => adn_page['id'], :author_adn_id => adn_page['user']['id']
-      PageRepository.save(page)
-      redirect '/' + page.name
-    else
-      flash[:msg] = "Page #{params[:name]} already exists :-("
-      redirect '/'
-    end
-  else
-    flash[:msg] = 'Invalid name!'
+  begin
+    Validator.valid_page?(params[:name])
+    adn_page = @adn.post 'posts', :machine_only => true, :annotations => [{:type => 'com.floatboth.supportadn.page', :value => {:name => params[:name]}}]
+    adn_page = adn_page.body['data']
+    page = Page.new :name => params[:name], :adn_id => adn_page['id'], :author_adn_id => adn_page['user']['id']
+    PageRepository.save(page)
+    redirect '/' + page.name
+  rescue ValidationException => e
+    flash[:msg] = e.message
     redirect '/'
   end
 end
