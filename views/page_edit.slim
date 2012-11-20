@@ -5,7 +5,7 @@ form.form-horizontal method="post" action="/#{@page.name}/edit"
     label.control-label for="_name" Page name
     .controls
       input#_name type="text" name="_name" value=@page.name
-  .control-group
-    .controls.btn-group
+  .form-actions
+    .btn-group
       button.btn.btn-primary type="submit" Save
       a.btn href="/#{@page.name}" Cancel
