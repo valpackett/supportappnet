@@ -12,7 +12,7 @@ This is easy:
 - it should contain a type selector and a text field
 - it should publish posts with:
   - `reply_to`: your page's post id
-  - `text` starting with your username
+  - `text` starting with your @username, like a regular reply
   - an annotation of type `com.floatboth.supportadn.entry`, value `{"type": "ideas|bugs|praise"}`
 
 NOTE: the type is plural. Yes, this looks weird. No, I'm not going to change it.
