@@ -6,5 +6,6 @@ form.form-horizontal method="post" action="/#{@page.name}/edit"
     .controls
       input#_name type="text" name="_name" value=@page.name
   .control-group
-    .controls
+    .controls.btn-group
       button.btn.btn-primary type="submit" Save
+      a.btn href="/#{@page.name}" Cancel

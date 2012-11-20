@@ -22,7 +22,7 @@ br
       .span9
         p == unmention comment['html']
         p
-          a href=comment['canonical_url'] =comment['created_at']
+          a href=comment['canonical_url'] = dateformat comment['created_at']
   p.lead Add a comment:
 - else
   p.lead Post the first comment!

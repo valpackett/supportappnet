@@ -38,6 +38,10 @@ helpers do
     first_mention.unlink unless first_mention.nil?
     df.to_html
   end
+
+  def dateformat(datestr)
+    Time.parse(datestr).strftime '%B %d, %Y %R'
+  end
 end
 
 get '/auth/appdotnet/callback' do

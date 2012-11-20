@@ -5,4 +5,4 @@ h4
 | by #{@entry['user']['name']} (@
 a href="/#{@page.name}/#{@entry['id']}" =@entry['user']['username']
 | ), posted on 
-a href=@entry['canonical_url'] =@entry['created_at']
+a href=@entry['canonical_url'] = dateformat @entry['created_at']
