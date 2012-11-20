@@ -23,16 +23,20 @@ br
         p == unmention comment['html']
         p
           a href=comment['canonical_url'] = dateformat comment['created_at']
-  p.lead Add a comment:
+
+  - cmttext = 'Add a comment:'
 - else
-  p.lead Post the first comment!
+  - cmttext = 'Post the first comment!'
 
-
-form.form-horizontal method="post" action="/#{@page.name}/#{@entry['id']}/reply"
-  .control-group
-    label.control-label for="text" Text
-    .controls
-      textarea#text name="text"
-  .control-group
-    .controls
-      button.btn type="submit" Post
+- unless @me.nil?
+  p.lead = cmttext
+  form.form-horizontal method="post" action="/#{@page.name}/#{@entry['id']}/reply"
+    .control-group
+      label.control-label for="text" Text
+      .controls
+        textarea#text name="text"
+    .control-group
+      .controls
+        button.btn type="submit" Post
+- else
+  == slim :_login_to_use

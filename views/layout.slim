@@ -11,7 +11,7 @@ html lang="en"
       .navbar-inner
         .container
           a.brand href="/" SupportApp
-          - if @adn.nil?
+          - if @me.nil?
             form.navbar-form.pull-right method="post" action="/auth/appdotnet"
               button.btn type="submit" Log in
           - else

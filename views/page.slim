@@ -1,12 +1,13 @@
 h1
   | Support for #{@page.name}
-  .btn-group.pull-right
-    a.btn.btn-primary href="/#{@page.name}/edit"
-      i.icon-edit.icon-white
-      | &nbsp;Edit
-    a.btn.btn-danger href="/#{@page.name}/delete"
-      i.icon-remove.icon-white
-      | &nbsp;Delete
+  - if !@me.nil? && @page.author_adn_id == @me['id']
+    .btn-group.pull-right
+      a.btn.btn-primary href="/#{@page.name}/edit"
+        i.icon-edit.icon-white
+        | &nbsp;Edit
+      a.btn.btn-danger href="/#{@page.name}/delete"
+        i.icon-remove.icon-white
+        | &nbsp;Delete
 
 - unless @entries.empty?
   h2 Suggestions:
@@ -20,15 +21,19 @@ h1
           i.icon-comment
           | &nbsp;Comments (#{@entry['num_replies']})
         == slim :_entry_buttons
-  p.lead Add a suggestion:
+  - ftxt = 'Add a suggestion:'
 - else
-  p.lead Create the first suggestion!
+  - ftxt = 'Create the first suggestion!'
 
-form.form-horizontal method="post" action="/#{@page.name}/reply"
-  .control-group
-    label.control-label for="text" Text
-    .controls
-      textarea#text name="text"
-  .control-group
-    .controls
-      button.btn type="submit" Create
+- unless @me.nil?
+  p.lead = ftxt
+  form.form-horizontal method="post" action="/#{@page.name}/reply"
+    .control-group
+      label.control-label for="text" Text
+      .controls
+        textarea#text name="text"
+    .control-group
+      .controls
+        button.btn type="submit" Create
+- else
+  == slim :_login_to_use
