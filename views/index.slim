@@ -3,7 +3,7 @@
   ul
     - @pages.each do |page|
       li
-        a href="/#{page.name}" =page.name
+        a href="/#{page.name}" #{page.fullname} (/#{page.name})
 
 p.lead
   | Create a new support page:
