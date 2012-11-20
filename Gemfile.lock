@@ -58,6 +58,7 @@ GEM
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
+    redcarpet (2.2.2)
     riak-client (1.1.0)
       beefcake (~> 0.3.7)
       builder (>= 2.1.2)
@@ -94,6 +95,7 @@ DEPENDENCIES
   nokogiri
   omniauth
   omniauth-appdotnet
+  redcarpet
   shotgun
   sinatra
   sinatra-flash

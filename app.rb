@@ -13,6 +13,7 @@ require_relative 'validator.rb'
 enable :sessions
 set :server, :thin
 set :port, 8080
+set :markdown, :layout_engine => :slim
 use Rack::Session::Cookie
 use OmniAuth::Builder do
   provider :appdotnet, ENV['ADN_ID'], ENV['ADN_SECRET'], :scope => 'write_post'
@@ -78,6 +79,10 @@ post '/new' do
     flash[:error] = e.message
     redirect '/'
   end
+end
+
+get '/docs' do
+  markdown :docs
 end
 
 get '/' do

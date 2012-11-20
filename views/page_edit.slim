@@ -1,4 +1,6 @@
-h1 Editing page #{@page.name}
+h1
+  | Editing page #{@page.name}
+  small  post id = #{@page.adn_id}
 
 form.form-horizontal method="post" action="/#{@page.name}/edit"
   .control-group
