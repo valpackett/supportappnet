@@ -18,19 +18,6 @@ use OmniAuth::Builder do
   provider :appdotnet, ENV['ADN_ID'], ENV['ADN_SECRET'], :scope => 'write_post'
 end
 
-$the_app_token = nil
-def app_token
-  if $the_app_token.nil?
-    $the_app_token = Faraday.new(:url => 'https://account.app.net/') do |a|
-      a.request  :url_encoded 
-      a.response :json, :content_type => /\bjson$/
-      a.adapter  Faraday.default_adapter
-    end.post('oauth/access_token', :client_id => ENV['ADN_ID'], :client_secret => ENV['ADN_SECRET'], :grant_type => 'client_credentials').body
-  end
-  puts $the_app_token
-  $the_app_token['access_token']
-end
-
 before do
   token = session[:token] || app_token
   @adn = Faraday.new(:url => 'https://alpha-api.app.net/stream/0/') do |adn|
