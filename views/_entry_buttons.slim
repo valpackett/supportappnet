@@ -2,11 +2,11 @@
   - unless @entry['user']['id'] == @me['id']
     - unless @entry['you_reposted']
       a.btn.btn-success href="/#{@page.name}/#{@entry['id']}/vote"
-        i.icon-plus.icon-white
+        i.icon-thumbs-up.icon-white
         | &nbsp;Vote
     - else
       a.btn.btn-warning href="/#{@page.name}/#{@entry['id']}/vote"
-        i.icon-minus.icon-white
+        i.icon-thumbs-down.icon-white
         | &nbsp;Unvote
   - if @entry['user']['id'] == @me['id']
     a.btn.btn-danger href="/#{@page.name}/#{@entry['id']}/delete"
