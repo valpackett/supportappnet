@@ -33,6 +33,10 @@ before do
   end
 end
 
+not_found do
+  slim :not_found
+end
+
 helpers do
   def unmention(post)
     df = Nokogiri::HTML.fragment(post)
@@ -94,6 +98,7 @@ end
 get '/' do
   unless @me.nil?
     @pages = PageRepository.find_by_author_adn_id @me['id']
+    halt 404 if @page.nil?
     slim :index
   else
     slim :landing
@@ -103,6 +108,7 @@ end
 # /:name/action {{{
 get '/:name' do
   @page = PageRepository.find_first_by_name params[:name]
+  halt 404 if @page.nil?
   @entries = @adn.get("posts/#{@page.adn_id}/replies?include_annotations=1").body['data'].select { |p|
     p['reply_to'] == @page.adn_id && p['is_deleted'] != true
   }.sort_by { |p|
