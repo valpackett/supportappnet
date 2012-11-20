@@ -98,7 +98,6 @@ end
 get '/' do
   unless @me.nil?
     @pages = PageRepository.find_by_author_adn_id @me['id']
-    halt 404 if @page.nil?
     slim :index
   else
     slim :landing
@@ -125,6 +124,7 @@ end
 
 before '/:name/*' do
   @page = PageRepository.find_first_by_name params[:name]
+  halt 404 if @page.nil?
 end
 
 post '/:name/reply' do
