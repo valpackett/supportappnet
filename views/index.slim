@@ -9,9 +9,13 @@ p.lead
   | Create a new support page:
 form.form-horizontal method="post" action="/new"
   .control-group
-    label.control-label for="name" Page name
+    label.control-label for="name" Page URL
     .controls
       input#name type="text" name="name"
+  .control-group
+    label.control-label for="fullname" Page name
+    .controls
+      input#name type="text" name="fullname"
   .control-group
     .controls
       button.btn type="submit" Create

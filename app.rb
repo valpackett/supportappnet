@@ -68,10 +68,10 @@ end
 
 post '/new' do
   begin
-    Validator.valid_page?(params[:name])
+    Validator.valid_page?(params[:name], params[:fullname])
     adn_page = @adn.post 'posts', :machine_only => true, :annotations => [{:type => 'com.floatboth.supportadn.page', :value => {:name => params[:name]}}]
     adn_page = adn_page.body['data']
-    page = Page.new :name => params[:name], :adn_id => adn_page['id'], :author_adn_id => adn_page['user']['id']
+    page = Page.new :name => params[:name], :fullname => params[:fullname], :adn_id => adn_page['id'], :author_adn_id => adn_page['user']['id']
     PageRepository.save(page)
     redirect '/' + page.name
   rescue ValidationException => e
@@ -136,6 +136,7 @@ end
 post '/:name/edit' do
   if @page.author_adn_id == @me['id']
     @page.name = params[:_name]
+    @page.fullname = params[:_fullname]
     PageRepository.save @page
     redirect '/' + @page.name
   else

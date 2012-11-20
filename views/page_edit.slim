@@ -2,9 +2,13 @@ h1 Editing page #{@page.name}
 
 form.form-horizontal method="post" action="/#{@page.name}/edit"
   .control-group
-    label.control-label for="_name" Page name
+    label.control-label for="_name" URL
     .controls
       input#_name type="text" name="_name" value=@page.name
+  .control-group
+    label.control-label for="_fullname" Name
+    .controls
+      input#_name type="text" name="_fullname" value=@page.fullname
   .form-actions
     .btn-group
       button.btn.btn-primary type="submit" Save

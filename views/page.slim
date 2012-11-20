@@ -1,5 +1,5 @@
 h1
-  | Support for #{@page.name}
+  | Support for #{@page.fullname}
   - if !@me.nil? && @page.author_adn_id == @me['id']
     .btn-group.pull-right
       a.btn.btn-primary href="/#{@page.name}/edit"

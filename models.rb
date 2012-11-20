@@ -21,7 +21,7 @@ end
 
 class Page
   include Curator::Model
-  attr_accessor :id, :adn_id, :name, :author_adn_id
+  attr_accessor :id, :adn_id, :name, :fullname, :author_adn_id
 end
 
 class PageRepository
