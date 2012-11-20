@@ -124,7 +124,6 @@ end
 
 before '/:name/*' do
   @page = PageRepository.find_first_by_name params[:name]
-  halt 404 if @page.nil?
 end
 
 post '/:name/reply' do
