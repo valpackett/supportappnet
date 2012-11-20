@@ -75,7 +75,7 @@ post '/new' do
     PageRepository.save(page)
     redirect '/' + page.name
   rescue ValidationException => e
-    flash[:msg] = e.message
+    flash[:error] = e.message
     redirect '/'
   end
 end
@@ -117,9 +117,9 @@ post '/:name/reply' do
     @adn.post 'posts', :text => "@#{page_author_username} #{params[:text]}", :reply_to => @page.adn_id, :annotations => [
       {:type => 'com.floatboth.supportadn.entry', :value => {:type => params[:type]}}
     ]
-    flash[:msg] = 'Thanks for your suggestion!'
+    flash[:success] = 'Thanks for your suggestion!'
   rescue ValidationException => e
-    flash[:msg] = e.message
+    flash[:error] = e.message
   end
   redirect '/' + params[:name]
 end
@@ -128,7 +128,7 @@ get '/:name/edit' do
   if @page.author_adn_id == @me['id']
     slim :page_edit
   else
-    flash[:msg] = "Can't edit page #{@page.name}."
+    flash[:error] = "Can't edit page #{@page.name}."
     redirect '/'
   end
 end
@@ -140,7 +140,7 @@ post '/:name/edit' do
     PageRepository.save @page
     redirect '/' + @page.name
   else
-    flash[:msg] = "Can't edit page #{@page.name}."
+    flash[:error] = "Can't edit page #{@page.name}."
     redirect '/'
   end
 end
@@ -149,9 +149,9 @@ get '/:name/delete' do
   if @page.author_adn_id == @me['id']
     @adn.delete "posts/#{@page.adn_id}"
     PageRepository.delete @page
-    flash[:msg] = "Deleted page #{@page.name}."
+    flash[:success] = "Deleted page #{@page.name}."
   else
-    flash[:msg] = "Can't delete page #{@page.name}."
+    flash[:error] = "Can't delete page #{@page.name}."
   end
   redirect '/'
 end
@@ -171,9 +171,9 @@ post '/:name/:entry_id/reply' do
     Validator.valid_post? params[:text]
     sugg_author_username = @adn.get("posts/#{params[:entry_id]}").body['data']['user']['username']
     @adn.post 'posts', :text => "@#{sugg_author_username} #{params[:text]}", :reply_to => params[:entry_id]
-    flash[:msg] = 'Thanks for your comment!'
+    flash[:success] = 'Thanks for your comment!'
   rescue ValidationException => e
-    flash[:msg] = e.message
+    flash[:error] = e.message
   end
   redirect "/#{params[:name]}/#{params[:entry_id]}"
 end
@@ -182,10 +182,10 @@ get '/:name/:entry_id/vote' do
   @entry = @adn.get("posts/#{params[:entry_id]}").body['data']
   unless @entry['you_reposted']
     @adn.post "posts/#{params[:entry_id]}/repost"
-    flash[:msg] = 'Thanks for your vote!'
+    flash[:success] = 'Thanks for your vote!'
   else
     @adn.delete "posts/#{params[:entry_id]}/repost"
-    flash[:msg] = 'Successfully unvoted.'
+    flash[:success] = 'Successfully unvoted.'
   end
   redirect "/#{params[:name]}/#{params[:entry_id]}"
 end
@@ -194,9 +194,9 @@ get '/:name/:entry_id/delete' do
   @entry = @adn.get("posts/#{params[:entry_id]}").body['data']
   if @entry['user']['id'] == @me['id']
     @adn.delete "posts/#{params[:entry_id]}"
-    flash[:msg] = 'Deleted your suggestion.'
+    flash[:success] = 'Deleted your suggestion.'
   else
-    flash[:msg] = "Can't delete this suggestion."
+    flash[:error] = "Can't delete this suggestion."
   end
   redirect "/#{params[:name]}"
 end

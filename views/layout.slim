@@ -19,11 +19,12 @@ html lang="en"
               li
                 a href="/auth/logout" Log out
     .container
-      - alert = flash[:msg]
-      - unless alert.nil?
-        .alert
-          button.close type="button" data-dismiss="alert" ×
-          = alert
+      - [:success, :error, :info].each do |type|
+        - alert = flash[type]
+        - unless alert.nil?
+          div class="alert alert-#{type.to_s}"
+            button.close type="button" data-dismiss="alert" ×
+            = alert
       == yield
     script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"
     script src="/js/bootstrap.min.js"
