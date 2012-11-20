@@ -106,10 +106,13 @@ get '/:name' do
   slim :page
 end
 
+before '/:name/*' do
+  @page = PageRepository.find_first_by_name params[:name]
+end
+
 post '/:name/reply' do
   begin
     Validator.valid_post? params[:text]
-    @page = PageRepository.find_first_by_name params[:name]
     page_author_username = @adn.get("users/#{@page.author_adn_id}").body['data']['username']
     @adn.post 'posts', :text => "@#{page_author_username} #{params[:text]}", :reply_to => @page.adn_id, :annotations => [
       {:type => 'com.floatboth.supportadn.entry', :value => {:type => params[:type]}}
@@ -122,7 +125,6 @@ post '/:name/reply' do
 end
 
 get '/:name/edit' do
-  @page = PageRepository.find_first_by_name params[:name]
   if @page.author_adn_id == @me['id']
     slim :page_edit
   else
@@ -132,7 +134,6 @@ get '/:name/edit' do
 end
 
 post '/:name/edit' do
-  @page = PageRepository.find_first_by_name params[:name]
   if @page.author_adn_id == @me['id']
     @page.name = params[:_name]
     PageRepository.save @page
@@ -144,7 +145,6 @@ post '/:name/edit' do
 end
 
 get '/:name/delete' do
-  @page = PageRepository.find_first_by_name params[:name]
   if @page.author_adn_id == @me['id']
     @adn.delete "posts/#{@page.adn_id}"
     PageRepository.delete @page
@@ -158,7 +158,6 @@ end
 
 # /:name/:entry_id/action {{{
 get '/:name/:entry_id' do
-  @page = PageRepository.find_first_by_name params[:name]
   @entry = @adn.get("posts/#{params[:entry_id]}").body['data']
   @comments = @adn.get("posts/#{params[:entry_id]}/replies").body['data'].select { |p|
     p['reply_to'] == params[:entry_id] && p['is_deleted'] != true
@@ -169,7 +168,6 @@ end
 post '/:name/:entry_id/reply' do
   begin
     Validator.valid_post? params[:text]
-    @page = PageRepository.find_first_by_name params[:name]
     sugg_author_username = @adn.get("posts/#{params[:entry_id]}").body['data']['user']['username']
     @adn.post 'posts', :text => "@#{sugg_author_username} #{params[:text]}", :reply_to => params[:entry_id]
     flash[:msg] = 'Thanks for your comment!'
@@ -180,7 +178,6 @@ post '/:name/:entry_id/reply' do
 end
 
 get '/:name/:entry_id/vote' do
-  @page = PageRepository.find_first_by_name params[:name]
   @entry = @adn.get("posts/#{params[:entry_id]}").body['data']
   unless @entry['you_reposted']
     @adn.post "posts/#{params[:entry_id]}/repost"
@@ -193,15 +190,13 @@ get '/:name/:entry_id/vote' do
 end
 
 get '/:name/:entry_id/delete' do
-  @page = PageRepository.find_first_by_name params[:name]
   @entry = @adn.get("posts/#{params[:entry_id]}").body['data']
   if @entry['user']['id'] == @me['id']
     @adn.delete "posts/#{params[:entry_id]}"
     flash[:msg] = 'Deleted your suggestion.'
   else
-    flash[:msg] = 'Can\'t delete this suggestion.'
+    flash[:msg] = "Can't delete this suggestion."
   end
   redirect "/#{params[:name]}"
 end
 # }}}
-#
