@@ -1,0 +1,10 @@
+h1 Editing page #{@page.name}
+
+form.form-horizontal method="post" action="/#{@page.name}/edit"
+  .control-group
+    label.control-label for="_name" Page name
+    .controls
+      input#_name type="text" name="_name" value=@page.name
+  .control-group
+    .controls
+      button.btn.btn-primary type="submit" Save

@@ -1,0 +1,8 @@
+h4
+  == unmention @entry['html']
+  | &nbsp;
+  span.badge.badge-success #{@entry['num_reposts']} vote#{'s' unless @entry['num_reposts'] == 1}
+| by #{@entry['user']['name']} (@
+a href="/#{@page.name}/#{@entry['id']}" =@entry['user']['username']
+| ), posted on 
+a href=@entry['canonical_url'] =@entry['created_at']

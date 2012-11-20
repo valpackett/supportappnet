@@ -1,0 +1,17 @@
+- unless @pages.empty?
+  h1 Your support pages
+  ul
+    - @pages.each do |page|
+      li
+        a href="/#{page.name}" =page.name
+
+p.lead
+  | Create a new support page:
+form.form-horizontal method="post" action="/new"
+  .control-group
+    label.control-label for="name" Page name
+    .controls
+      input#name type="text" name="name"
+  .control-group
+    .controls
+      button.btn type="submit" Create

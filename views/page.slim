@@ -1,0 +1,34 @@
+h1
+  | Support for #{@page.name}
+  .btn-group.pull-right
+    a.btn.btn-primary href="/#{@page.name}/edit"
+      i.icon-edit.icon-white
+      | &nbsp;Edit
+    a.btn.btn-danger href="/#{@page.name}/delete"
+      i.icon-remove.icon-white
+      | &nbsp;Delete
+
+- unless @entries.empty?
+  h2 Suggestions:
+  - @entries.each do |entry|
+    - @entry = entry
+    .well
+      == slim :_entry_desc
+      br
+      .btn-group
+        a.btn href="/#{@page.name}/#{@entry['id']}"
+          i.icon-comment
+          | &nbsp;Comments (#{@entry['num_replies']})
+        == slim :_entry_buttons
+  p.lead Add a suggestion:
+- else
+  p.lead Create the first suggestion!
+
+form.form-horizontal method="post" action="/#{@page.name}/reply"
+  .control-group
+    label.control-label for="text" Text
+    .controls
+      textarea#text name="text"
+  .control-group
+    .controls
+      button.btn type="submit" Create
