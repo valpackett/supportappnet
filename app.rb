@@ -55,6 +55,18 @@ helpers do
   def dateformat(datestr)
     Time.parse(datestr).strftime '%B %d, %Y %R'
   end
+
+  def active_filter?(type)
+    params[:filter] == type.downcase
+  end
+
+  def types
+    [
+      {:slug => 'ideas',  :singular => 'Idea',   :plural => 'Ideas',  :icon => 'icon-bullhorn'},
+      {:slug => 'bugs',   :singular => 'Bug',    :plural => 'Bugs',   :icon => 'icon-fire'},
+      {:slug => 'praise', :singular => 'Praise', :plural => 'Praise', :icon => 'icon-heart'},
+    ]
+  end
 end
 
 get '/auth/appdotnet/callback' do
@@ -97,19 +109,26 @@ end
 # /:name/action {{{
 get '/:name' do
   @page = PageRepository.find_first_by_name params[:name]
-  puts @adn.get("posts/#{@page.adn_id}/replies").body
-  @entries = @adn.get("posts/#{@page.adn_id}/replies").body['data'].select { |p|
+  @entries = @adn.get("posts/#{@page.adn_id}/replies?include_annotations=1").body['data'].select { |p|
     p['reply_to'] == @page.adn_id && p['is_deleted'] != true
   }.sort_by { |p|
     p['num_reposts'].to_i
   }.reverse
+  unless params[:filter].nil?
+    @entries.select! { |p|
+      anns = p['annotations'].select { |a| a['type'] == 'com.floatboth.supportadn.entry' }
+      anns.first['value']['type'] == params[:filter] unless anns.empty?
+    }
+  end
   slim :page
 end
 
 post '/:name/reply' do
   @page = PageRepository.find_first_by_name params[:name]
   page_author_username = @adn.get("users/#{@page.author_adn_id}").body['data']['username']
-  @adn.post 'posts', :text => "@#{page_author_username} #{params[:text]}", :reply_to => @page.adn_id
+  @adn.post 'posts', :text => "@#{page_author_username} #{params[:text]}", :reply_to => @page.adn_id, :annotations => [
+    {:type => 'com.floatboth.supportadn.entry', :value => {:type => params[:type]}}
+  ]
   flash[:msg] = 'Thanks for your suggestion!'
   redirect '/' + params[:name]
 end

@@ -9,8 +9,18 @@ h1
         i.icon-remove.icon-white
         | &nbsp;Delete
 
-- unless @entries.empty?
+- unless @entries.empty? && params[:filter].nil?
   h2 Suggestions:
+  ul.nav.nav-pills
+    li class="#{'active' if params[:filter].nil?}"
+      a href="/#{@page.name}"
+        i.icon-list
+        | &nbsp;All
+    - types.each do |type|
+      li class="#{'active' if active_filter? type[:slug]}"
+        a href="/#{@page.name}?filter=#{type[:slug]}"
+          i class=type[:icon]
+          | &nbsp;#{type[:plural]}
   - @entries.each do |entry|
     - @entry = entry
     .well
@@ -28,6 +38,12 @@ h1
 - unless @me.nil?
   p.lead = ftxt
   form.form-horizontal method="post" action="/#{@page.name}/reply"
+    .control-group
+      label.control-label for="type" Type
+      .controls
+        select#type name="type"
+          - types.each do |type|
+            option value=type[:slug] selected={'selected' if params[:filter] == type[:slug]} =type[:singular]
     .control-group
       label.control-label for="text" Text
       .controls
