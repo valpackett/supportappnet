@@ -73,6 +73,10 @@ helpers do
     session[:form] = nil
     form
   end
+
+  def id_to_name(id)
+    @adn.get("users/#{id}").body['data']['username']
+  end
 end
 
 get '/auth/appdotnet/callback' do
@@ -143,8 +147,7 @@ end
 
 post '/:name/reply' do
   begin
-    page_author_username = @adn.get("users/#{@page.author_adn_id}").body['data']['username']
-    text = "@#{page_author_username} ##{@page.name} #{params[:text]}"
+    text = "@#{id_to_name @page.author_adn_id} ##{@page.name} #{params[:text]}"
     Validator.valid_post? text, params[:text]
     @adn.post 'posts', :text => text, :reply_to => @page.adn_id, :annotations => [
       {:type => 'com.floatboth.supportadn.entry', :value => {:type => params[:type]}}
