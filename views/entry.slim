@@ -23,6 +23,8 @@ br
         p == unmention comment['html']
         p
           a href=comment['canonical_url'] = dateformat comment['created_at']
+          |  via 
+          a href=comment['source']['link'] = comment['source']['name']
 
   - cmttext = 'Add a comment:'
 - else
