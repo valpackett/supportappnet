@@ -1,6 +1,6 @@
 h1
   | Support for #{@page.fullname}
-  - if !@me.nil? && @page.author_adn_id == @me['id']
+  - if !@me.nil? && owns_page?
     .btn-group.pull-right
       a.btn.btn-primary href="/#{@page.name}/edit"
         i.icon-edit.icon-white

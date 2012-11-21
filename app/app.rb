@@ -10,6 +10,7 @@ require_relative 'oauth2.rb'
 require_relative 'models.rb'
 require_relative 'validator.rb'
 require_relative 'helpers.rb'
+require_relative 'permissions.rb'
 
 enable :sessions
 set :session_secret, ENV['SECRET_KEY'] || 'aaaaa'
@@ -21,6 +22,7 @@ use OmniAuth::Builder do
   provider :appdotnet, ENV['ADN_ID'], ENV['ADN_SECRET'], :scope => 'write_post'
 end
 Validator.page_repo = PageRepository
+include Permissions
 
 before do
   token = session[:token] || app_token
@@ -121,7 +123,7 @@ post '/:name/reply' do
 end
 
 get '/:name/edit' do
-  if @page.author_adn_id == @me['id']
+  if owns_page?
     slim :page_edit
   else
     flash[:error] = "Can't edit page #{@page.name}."
@@ -130,7 +132,7 @@ get '/:name/edit' do
 end
 
 post '/:name/edit' do
-  if @page.author_adn_id == @me['id']
+  if owns_page?
     @page.name = params[:_name]
     @page.fullname = params[:_fullname]
     PageRepository.save @page
@@ -142,7 +144,7 @@ post '/:name/edit' do
 end
 
 get '/:name/delete' do
-  if @page.author_adn_id == @me['id']
+  if owns_page?
     @adn.delete "posts/#{@page.adn_id}"
     PageRepository.delete @page
     flash[:success] = "Deleted page #{@page.name}."
@@ -191,7 +193,7 @@ end
 
 get '/:name/:entry_id/delete' do
   @entry = @adn.get("posts/#{params[:entry_id]}").body['data']
-  if @entry['user']['id'] == @me['id']
+  if can_delete_suggestion?
     @adn.delete "posts/#{params[:entry_id]}"
     flash[:success] = 'Deleted your suggestion.'
   else
@@ -202,7 +204,7 @@ end
 
 get '/:name/:entry_id/archive' do
   @entry = @adn.get("posts/#{params[:entry_id]}").body['data']
-  if @page.author_adn_id == @me['id']
+  if can_archive_suggestion?
     @page.archive ||= []
     unless @page.archive.include? params[:entry_id]
       @page.archive << params[:entry_id]

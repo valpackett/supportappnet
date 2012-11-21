@@ -1,6 +1,6 @@
 - unless @me.nil?
   - unless @page.archive.include? @entry['id']
-    - unless @entry['user']['id'] == @me['id']
+    - if can_vote? @entry
       - unless @entry['you_reposted']
         a.btn.btn-success href="/#{@page.name}/#{@entry['id']}/vote"
           i.icon-thumbs-up.icon-white
@@ -9,7 +9,7 @@
         a.btn.btn-warning href="/#{@page.name}/#{@entry['id']}/vote"
           i.icon-thumbs-down.icon-white
           | &nbsp;Unvote
-  - if @page.author_adn_id == @me['id'] # PAGE AUTHOR
+  - if can_archive_suggestion?
     - unless @page.archive.include? @entry['id']
       a.btn.btn-primary href="/#{@page.name}/#{@entry['id']}/archive"
         i.icon-briefcase.icon-white
@@ -18,7 +18,7 @@
       a.btn.btn-primary href="/#{@page.name}/#{@entry['id']}/archive"
         i.icon-inbox.icon-white
         | &nbsp;Unarchive
-  - if @entry['user']['id'] == @me['id'] # SUGGESTION AUTHOR
+  - if can_delete_suggestion?
     a.btn.btn-danger href="/#{@page.name}/#{@entry['id']}/delete"
       i.icon-remove.icon-white
       | &nbsp;Delete
