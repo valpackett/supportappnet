@@ -69,7 +69,7 @@ end
 
 get '/auth/appdotnet/callback' do
   session[:token] = request.env['omniauth.auth']['credentials']['token']
-  redirect '/'
+  redirect request.env['omniauth.origin'] || '/'
 end
 
 get '/auth/logout' do
