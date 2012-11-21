@@ -16,7 +16,7 @@ Curator.configure(:mongo) do |config|
   config.environment = "development"
   config.client      = conn
   config.database    = db
-  config.migrations_path = File.expand_path(File.dirname(__FILE__) + "/migrate")
+  config.migrations_path = File.expand_path(File.dirname(__FILE__) + "../migrations")
 end
 
 class Page
