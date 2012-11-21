@@ -42,6 +42,8 @@ helpers do
     df = Nokogiri::HTML.fragment(post)
     first_mention = df.css('[itemprop=mention]').first
     first_mention.unlink unless first_mention.nil?
+    first_hashtag = df.css('[itemprop=hashtag]').first
+    first_hashtag.unlink unless first_hashtag.nil?
     df.to_html
   end
 
@@ -142,7 +144,7 @@ end
 post '/:name/reply' do
   begin
     page_author_username = @adn.get("users/#{@page.author_adn_id}").body['data']['username']
-    text = "@#{page_author_username} #{params[:text]}"
+    text = "@#{page_author_username} ##{@page.name} #{params[:text]}"
     Validator.valid_post? text, params[:text]
     @adn.post 'posts', :text => text, :reply_to => @page.adn_id, :annotations => [
       {:type => 'com.floatboth.supportadn.entry', :value => {:type => params[:type]}}
