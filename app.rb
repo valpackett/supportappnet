@@ -198,7 +198,7 @@ get '/:name/:entry_id' do
   @entry = @adn.get("posts/#{params[:entry_id]}").body['data']
   @comments = @adn.get("posts/#{params[:entry_id]}/replies").body['data'].select { |p|
     p['reply_to'] == params[:entry_id] && p['is_deleted'] != true
-  }
+  }.reverse
   @form = get_last_form
   slim :entry
 end
