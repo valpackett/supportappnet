@@ -48,11 +48,11 @@ h1
       .controls
         select#type name="type"
           - types.each do |type|
-            option value=type[:slug] selected={'selected' if params[:filter] == type[:slug]} =type[:singular]
+            option value=type[:slug] selected={'selected' if params[:filter] == type[:slug] || @form[:type] == type[:slug]} =type[:singular]
     .control-group
       label.control-label for="text" Text
       .controls
-        textarea#text name="text"
+        textarea#text name="text" =@form[:text]
     .form-actions
       button.btn type="submit" Create
 - else

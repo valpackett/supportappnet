@@ -13,8 +13,9 @@ class Validator
     true
   end
 
-  def self.valid_post?(text)
-    raise ValidationException, "Post can't be empty" if text.nil? || text == ''
+  def self.valid_post?(text, bare_text)
+    raise ValidationException, "Post can't be empty" if bare_text.nil? || bare_text == ''
+    raise ValidationException, "Post can't be over 256 characters" if text.length > 256
     true
   end
 end

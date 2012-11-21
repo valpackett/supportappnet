@@ -65,6 +65,12 @@ helpers do
     anns = entry['annotations'].select { |a| a['type'] == 'com.floatboth.supportadn.entry' }
     types.select { |t| t[:slug] == anns.first['value']['type'] }.first unless anns.empty?
   end
+
+  def get_last_form
+    form = session[:form] || {}
+    session[:form] = nil
+    form
+  end
 end
 
 get '/auth/appdotnet/callback' do
@@ -125,6 +131,7 @@ get '/:name' do
   else
     @entries.reject! { |p| @page.archive.include? p['id'] }
   end
+  @form = get_last_form
   slim :page
 end
 
@@ -134,14 +141,16 @@ end
 
 post '/:name/reply' do
   begin
-    Validator.valid_post? params[:text]
     page_author_username = @adn.get("users/#{@page.author_adn_id}").body['data']['username']
-    @adn.post 'posts', :text => "@#{page_author_username} #{params[:text]}", :reply_to => @page.adn_id, :annotations => [
+    text = "@#{page_author_username} #{params[:text]}"
+    Validator.valid_post? text, params[:text]
+    @adn.post 'posts', :text => text, :reply_to => @page.adn_id, :annotations => [
       {:type => 'com.floatboth.supportadn.entry', :value => {:type => params[:type]}}
     ]
     flash[:success] = 'Thanks for your suggestion!'
   rescue ValidationException => e
     flash[:error] = e.message
+    session[:form] = {:text => params[:text], :type => params[:type]}
   end
   redirect '/' + params[:name]
 end
@@ -185,17 +194,20 @@ get '/:name/:entry_id' do
   @comments = @adn.get("posts/#{params[:entry_id]}/replies").body['data'].select { |p|
     p['reply_to'] == params[:entry_id] && p['is_deleted'] != true
   }
+  @form = get_last_form
   slim :entry
 end
 
 post '/:name/:entry_id/reply' do
   begin
-    Validator.valid_post? params[:text]
     sugg_author_username = @adn.get("posts/#{params[:entry_id]}").body['data']['user']['username']
-    @adn.post 'posts', :text => "@#{sugg_author_username} #{params[:text]}", :reply_to => params[:entry_id]
+    text = "@#{sugg_author_username} #{params[:text]}"
+    Validator.valid_post? text, params[:text]
+    @adn.post 'posts', :text => text, :reply_to => params[:entry_id]
     flash[:success] = 'Thanks for your comment!'
   rescue ValidationException => e
     flash[:error] = e.message
+    session[:form] = {:text => params[:text]}
   end
   redirect "/#{params[:name]}/#{params[:entry_id]}"
 end
