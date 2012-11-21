@@ -33,6 +33,7 @@ br
   - unless @page.archive.include? @entry['id']
     p.lead = cmttext
     form.form-horizontal method="post" action="/#{@page.name}/#{@entry['id']}/reply"
+      == Rack::Csrf.tag env
       .control-group
         label.control-label for="text" Text
         .controls

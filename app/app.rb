@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/flash'
+require 'rack/csrf'
 require 'omniauth'
 require 'omniauth-appdotnet'
 require 'faraday'
@@ -18,6 +19,7 @@ set :server, :thin
 set :port, 8080
 set :markdown, :layout_engine => :slim
 use Rack::Session::Cookie
+use Rack::Csrf
 use OmniAuth::Builder do
   provider :appdotnet, ENV['ADN_ID'], ENV['ADN_SECRET'], :scope => 'write_post'
 end

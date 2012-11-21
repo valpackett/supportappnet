@@ -3,6 +3,7 @@ h1
   small  post id = #{@page.adn_id}
 
 form.form-horizontal method="post" action="/#{@page.name}/edit"
+  == Rack::Csrf.tag env
   .control-group
     label.control-label for="_name" URL
     .controls

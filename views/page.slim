@@ -43,6 +43,7 @@ h1
 - unless @me.nil?
   p.lead = ftxt
   form.form-horizontal method="post" action="/#{@page.name}/reply"
+    == Rack::Csrf.tag env
     .control-group
       label.control-label for="type" Type
       .controls

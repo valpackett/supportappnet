@@ -1,4 +1,5 @@
 p.lead
   form.form-inline method="post" action="/auth/appdotnet"
+    == Rack::Csrf.tag env
     button.btn.btn-small type="submit" Log in
     | &nbsp;to use SupportApp.

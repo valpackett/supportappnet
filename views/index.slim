@@ -8,6 +8,7 @@
 p.lead
   | Create a new support page:
 form.form-horizontal method="post" action="/new"
+  == Rack::Csrf.tag env
   .control-group
     label.control-label for="name" Page URL
     .controls

@@ -17,6 +17,7 @@ html lang="en"
           a.brand href="/" SupportApp
           - if @me.nil?
             form.navbar-form.pull-right method="post" action="/auth/appdotnet"
+              == Rack::Csrf.tag env
               button.btn type="submit" Log in
           - else
             ul.nav.pull-right
