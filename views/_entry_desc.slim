@@ -8,7 +8,15 @@ h4
         i class="icon-white #{type[:icon]}"
         |  #{type[:singular]}
   | &nbsp;
-  span.badge.badge-success #{@entry['num_reposts']} vote#{'s' unless @entry['num_reposts'] == 1}
+  - @page.archive ||= []
+  - if @page.archive.include? @entry['id'] # && @is_archive.nil?
+    span.label.label-inverse
+      i.icon-white.icon-briefcase
+      |  Archived
+    |  
+  span.badge.badge-success
+    i.icon-white.icon-thumbs-up
+    |  #{@entry['num_reposts']} vote#{'s' unless @entry['num_reposts'] == 1}
 | by #{@entry['user']['name']} (@
 a href="/#{@page.name}/#{@entry['id']}" =@entry['user']['username']
 | ), posted on 

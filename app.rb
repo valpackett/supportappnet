@@ -83,7 +83,7 @@ post '/new' do
     adn_page = @adn.post 'posts', :machine_only => true, :annotations => [{:type => 'com.floatboth.supportadn.page', :value => {:name => params[:name]}}]
     adn_page = adn_page.body['data']
     page = Page.new :name => params[:name], :fullname => params[:fullname], :adn_id => adn_page['id'], :author_adn_id => adn_page['user']['id']
-    PageRepository.save(page)
+    PageRepository.save page
     redirect '/' + page.name
   rescue ValidationException => e
     flash[:error] = e.message
@@ -118,6 +118,12 @@ get '/:name' do
       anns = p['annotations'].select { |a| a['type'] == 'com.floatboth.supportadn.entry' }
       anns.first['value']['type'] == params[:filter] unless anns.empty?
     }
+  end
+  @page.archive ||= []
+  unless params[:archive].nil?
+    @entries.select! { |p| @page.archive.include? p['id'] }
+  else
+    @entries.reject! { |p| @page.archive.include? p['id'] }
   end
   slim :page
 end
@@ -215,5 +221,23 @@ get '/:name/:entry_id/delete' do
     flash[:error] = "Can't delete this suggestion."
   end
   redirect "/#{params[:name]}"
+end
+
+get '/:name/:entry_id/archive' do
+  @entry = @adn.get("posts/#{params[:entry_id]}").body['data']
+  if @entry['user']['id'] == @page.author_adn_id
+    @page.archive ||= []
+    unless @page.archive.include? params[:entry_id]
+      @page.archive << params[:entry_id]
+      flash[:success] = 'Archived the suggestion.'
+    else
+      @page.archive.delete params[:entry_id]
+      flash[:success] = 'Unarchived the suggestion.'
+    end
+    PageRepository.save @page
+    redirect "/#{params[:name]}/#{params[:entry_id]}"
+  else
+    flash[:error] = "Can't archive this suggestion."
+  end
 end
 # }}}

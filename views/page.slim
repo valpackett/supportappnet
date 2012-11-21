@@ -12,7 +12,7 @@ h1
 - unless @entries.empty? && params[:filter].nil?
   h2 Suggestions:
   ul.nav.nav-pills
-    li class="#{'active' if params[:filter].nil?}"
+    li class="#{'active' if params[:filter].nil? && params[:archive].nil?}"
       a href="/#{@page.name}"
         i.icon-list
         | &nbsp;All
@@ -21,6 +21,10 @@ h1
         a href="/#{@page.name}?filter=#{type[:slug]}"
           i class=type[:icon]
           | &nbsp;#{type[:plural]}
+    li class="#{'active' unless params[:archive].nil?}"
+      a href="/#{@page.name}?archive=1"
+        i.icon-briefcase
+        | &nbsp;Archive
   - @is_page = true
   - @entries.each do |entry|
     - @entry = entry

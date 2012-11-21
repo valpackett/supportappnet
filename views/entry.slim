@@ -29,13 +29,15 @@ br
   - cmttext = 'Post the first comment!'
 
 - unless @me.nil?
-  p.lead = cmttext
-  form.form-horizontal method="post" action="/#{@page.name}/#{@entry['id']}/reply"
-    .control-group
-      label.control-label for="text" Text
-      .controls
-        textarea#text name="text"
-    .form-actions
-      button.btn type="submit" Post
+  - @page.archive ||= []
+  - unless @page.archive.include? @entry['id']
+    p.lead = cmttext
+    form.form-horizontal method="post" action="/#{@page.name}/#{@entry['id']}/reply"
+      .control-group
+        label.control-label for="text" Text
+        .controls
+          textarea#text name="text"
+      .form-actions
+        button.btn type="submit" Post
 - else
   == slim :_login_to_use

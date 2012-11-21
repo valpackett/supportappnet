@@ -1,14 +1,24 @@
 - unless @me.nil?
-  - unless @entry['user']['id'] == @me['id']
-    - unless @entry['you_reposted']
-      a.btn.btn-success href="/#{@page.name}/#{@entry['id']}/vote"
-        i.icon-thumbs-up.icon-white
-        | &nbsp;Vote
+  - unless @page.archive.include? @entry['id']
+    - unless @entry['user']['id'] == @me['id']
+      - unless @entry['you_reposted']
+        a.btn.btn-success href="/#{@page.name}/#{@entry['id']}/vote"
+          i.icon-thumbs-up.icon-white
+          | &nbsp;Vote
+      - else
+        a.btn.btn-warning href="/#{@page.name}/#{@entry['id']}/vote"
+          i.icon-thumbs-down.icon-white
+          | &nbsp;Unvote
+  - if @page.author_adn_id == @me['id'] # PAGE AUTHOR
+    - unless @page.archive.include? @entry['id']
+      a.btn.btn-primary href="/#{@page.name}/#{@entry['id']}/archive"
+        i.icon-briefcase.icon-white
+        | &nbsp;Archive
     - else
-      a.btn.btn-warning href="/#{@page.name}/#{@entry['id']}/vote"
-        i.icon-thumbs-down.icon-white
-        | &nbsp;Unvote
-  - if @entry['user']['id'] == @me['id']
+      a.btn.btn-primary href="/#{@page.name}/#{@entry['id']}/archive"
+        i.icon-inbox.icon-white
+        | &nbsp;Unarchive
+  - if @entry['user']['id'] == @me['id'] # SUGGESTION AUTHOR
     a.btn.btn-danger href="/#{@page.name}/#{@entry['id']}/delete"
       i.icon-remove.icon-white
       | &nbsp;Delete
