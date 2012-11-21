@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 helpers do
   def unmention(post)
     df = Nokogiri::HTML.fragment(post)
