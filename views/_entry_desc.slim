@@ -18,6 +18,6 @@ h4
     i.icon-white.icon-thumbs-up
     |  #{@entry['num_reposts']} vote#{'s' unless @entry['num_reposts'] == 1}
 | by #{@entry['user']['name']} (@
-a href="/#{@page.name}/#{@entry['id']}" =@entry['user']['username']
+a href=@entry['user']['canonical_url'] =@entry['user']['username']
 | ), posted on 
 a href=@entry['canonical_url'] = dateformat @entry['created_at']
