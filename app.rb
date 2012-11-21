@@ -242,7 +242,7 @@ end
 
 get '/:name/:entry_id/archive' do
   @entry = @adn.get("posts/#{params[:entry_id]}").body['data']
-  if @entry['user']['id'] == @page.author_adn_id
+  if @page.author_adn_id == @me['id']
     @page.archive ||= []
     unless @page.archive.include? params[:entry_id]
       @page.archive << params[:entry_id]
