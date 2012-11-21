@@ -19,6 +19,7 @@ use Rack::Session::Cookie
 use OmniAuth::Builder do
   provider :appdotnet, ENV['ADN_ID'], ENV['ADN_SECRET'], :scope => 'write_post'
 end
+Validator.page_repo = PageRepository
 
 before do
   token = session[:token] || app_token

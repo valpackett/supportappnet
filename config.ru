@@ -1,5 +1,5 @@
 require 'rubygems'
 require 'sinatra'
-require './lib/app.rb'
+require './app/app.rb'
 
 run Sinatra::Application
