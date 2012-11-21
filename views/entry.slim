@@ -36,8 +36,9 @@ br
       .control-group
         label.control-label for="text" Text
         .controls.input-prepend.textarea-prepend
-          span.add-on @#{@entry['user']['username']}
-          textarea.input-xlarge#text name="text" =@form[:text]
+          - preptext = "@#{@entry['user']['username']}"
+          span.add-on =preptext
+          textarea.input-xlarge#text name="text" required="required" maxlength="#{255 - preptext.length}" =@form[:text]
       .form-actions
         button.btn type="submit" Post
 - else

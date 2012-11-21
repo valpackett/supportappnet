@@ -52,8 +52,9 @@ h1
     .control-group
       label.control-label for="text" Text
       .controls.input-prepend.textarea-prepend
-        span.add-on @#{id_to_name @page.author_adn_id} ##{@page.name}
-        textarea.input-xlarge#text name="text" =@form[:text]
+        - preptext = "@#{id_to_name @page.author_adn_id} ##{@page.name}"
+        span.add-on =preptext
+        textarea.input-xlarge#text name="text" required="required" maxlength="#{255 - preptext.length}" =@form[:text]
     .form-actions
       button.btn type="submit" Create
 - else
