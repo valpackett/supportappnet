@@ -11,7 +11,7 @@ require_relative 'models.rb'
 require_relative 'validator.rb'
 
 enable :sessions
-set :secret_key, ENV['SECRET_KEY'] || 'aaaaa'
+set :session_secret, ENV['SECRET_KEY'] || 'aaaaa'
 set :server, :thin
 set :port, 8080
 set :markdown, :layout_engine => :slim
