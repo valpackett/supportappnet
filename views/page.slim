@@ -51,10 +51,11 @@ h1
             option value=type[:slug] selected={'selected' if params[:filter] == type[:slug] || @form[:type] == type[:slug]} =type[:singular]
     .control-group
       label.control-label for="text" Text
-      .controls.input-prepend.textarea-prepend
-        - preptext = "@#{id_to_name @page.author_adn_id} ##{@page.name}"
-        span.add-on =preptext
-        textarea.input-xlarge#text name="text" required="required" maxlength="#{255 - preptext.length}" =@form[:text]
+      .controls
+        .input-prepend
+          - preptext = "@#{id_to_name @page.author_adn_id} ##{@page.name}"
+          span.add-on.hidden-phone =preptext
+          textarea.input-xlarge#text name="text" required="required" maxlength="#{255 - preptext.length}" =@form[:text]
     .form-actions
       button.btn type="submit" Create
 - else

@@ -11,11 +11,13 @@ form.form-horizontal method="post" action="/new"
   .control-group
     label.control-label for="name" Page URL
     .controls
-      input#name type="text" name="name"
+      .input-prepend
+        span.add-on =request.host + '/'
+        input#name type="text" name="name" required="required" maxlength="64"
   .control-group
     label.control-label for="fullname" Page name
     .controls
-      input#name type="text" name="fullname"
+      input#name type="text" name="fullname" required="required" maxlength="128"
   .control-group
     .controls
       button.btn type="submit" Create
