@@ -11,3 +11,12 @@ def app_token
   end
   $the_app_token
 end
+
+def adn
+  Faraday.new(:url => 'https://alpha-api.app.net/stream/0/') do |adn|
+    adn.request  :authorization, 'Bearer', session[:token] || app_token
+    adn.request  :json
+    adn.response :json, :content_type => /\bjson$/
+    adn.adapter  Faraday.default_adapter
+  end
+end

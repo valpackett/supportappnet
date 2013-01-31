@@ -1,6 +1,6 @@
 require 'nokogiri'
 
-helpers do
+module Helpers
   def unmention(post)
     df = Nokogiri::HTML.fragment(post)
     first_mention = df.css('[itemprop=mention]').first
