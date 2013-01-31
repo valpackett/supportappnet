@@ -25,6 +25,10 @@ end
 Validator.page_repo = PageRepository
 include Permissions
 
+configure :production do
+  require 'newrelic_rpm'
+end
+
 before do
   @adn = Faraday.new(:url => 'https://alpha-api.app.net/stream/0/') do |adn|
     adn.request  :authorization, 'Bearer', session[:token] || app_token

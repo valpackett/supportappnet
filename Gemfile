@@ -13,6 +13,13 @@ gem "bson_ext", "1.6.0"
 gem "nokogiri"
 gem "redcarpet"
 gem "thin"
-gem "shotgun"
 gem "rack_csrf"
-gem "rspec"
+
+group :development, :test do
+  gem "rspec"
+  gem "shotgun"
+end
+
+group :production do
+  gem "newrelic_rpm"
+end
