@@ -26,9 +26,8 @@ Validator.page_repo = PageRepository
 include Permissions
 
 before do
-  token = session[:token] || app_token
   @adn = Faraday.new(:url => 'https://alpha-api.app.net/stream/0/') do |adn|
-    adn.request  :oauth2bearer, token
+    adn.request  :authorization, 'Bearer', session[:token] || app_token
     adn.request  :json
     adn.response :json, :content_type => /\bjson$/
     adn.adapter  Faraday.default_adapter
