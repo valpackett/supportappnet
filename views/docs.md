@@ -20,10 +20,6 @@ This is easy:
 
 NOTE: the type is plural. Yes, this looks weird. No, I'm not going to change it.
 
-## Donations
-
-If you like this service, please [buy the RAW original file of my profile picture](http://gum.co/rYqF).
-
 ## Privacy Policy
 
 SupportApp does not store any private data.
