@@ -38,5 +38,11 @@ html lang="en"
         a href="/docs" Documentation (Dev, ToS, Privacy)
         |  | 
         a href="/supportapp" Support
+        - if @ad
+          .well
+            a href=@ad[:href]
+              p
+                img src=@ad[:img] alt=""
+              p = @ad[:text]
     script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"
     script src="/js/bootstrap.min.js"

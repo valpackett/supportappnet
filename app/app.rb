@@ -42,6 +42,17 @@ class Supportapp < Sinatra::Base
   before do
     @adn = adn
     @me = @adn.get('users/me').body['data'] unless session[:token].nil?
+    begin
+      ad = @adn.get('users/@appvertise/posts?include_post_annotations=1').body['data'][0]
+      pt = DateTime.parse ad['annotations'].select { |a| a['type'] == 'com.floatboth.appvertise.ad' }.first['value']['paid_through']
+      unless pt < DateTime.now
+        @ad = {:href => "#{ad['entities']['links'].first['url']}?key=#{ENV['APPVERTISE_KEY']}",
+               :text => ad['entities']['links'].first['text'],
+               :img => ad['annotations'].select { |a| a['type'] == 'net.app.core.oembed' }.first['value']['url']}
+      end
+    rescue Exception => e
+      puts e
+    end
   end
 
   not_found do
