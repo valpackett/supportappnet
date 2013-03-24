@@ -9,7 +9,7 @@ GIT
       riak-client (>= 1.0.0)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     activemodel (3.2.9)
       activesupport (= 3.2.9)
@@ -29,6 +29,9 @@ GEM
       multipart-post (~> 1.1)
     faraday_middleware (0.9.0)
       faraday (>= 0.7.4, < 0.9)
+    faraday_middleware-multi_json (0.0.5)
+      faraday_middleware
+      multi_json
     hashie (1.2.0)
     httpauth (0.2.0)
     i18n (0.6.1)
@@ -48,6 +51,7 @@ GEM
       jwt (~> 0.1.4)
       multi_json (~> 1.0)
       rack (~> 1.2)
+    oj (2.0.10)
     omniauth (1.1.1)
       hashie (~> 1.2)
       rack
@@ -103,9 +107,11 @@ DEPENDENCIES
   curator!
   faraday
   faraday_middleware
+  faraday_middleware-multi_json
   mongo (= 1.6.0)
   newrelic_rpm
   nokogiri
+  oj
   omniauth
   omniauth-appdotnet
   rack_csrf
